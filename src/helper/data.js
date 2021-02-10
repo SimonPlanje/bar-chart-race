@@ -8,7 +8,8 @@ const fetchData = (setbarRaceState, setEventState) =>{
     const eventDashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0ispSJft5GVxwMtalNZLqlwrk6j9Ig2azCOlGp0IGfrDbKTFBinaOpgGou1Nyz-_w2-sIqii0_DwK/pub?gid=0&single=true&output=csv"
 
     async function getData(name){
-        const data = await d3.csv(name)
+        const response = await d3.csv(name)
+        const data = response.json
         return data
     }
 
@@ -19,7 +20,8 @@ const fetchData = (setbarRaceState, setEventState) =>{
 
             console.log(dayData)
             console.log(eventData)
-
+            localStorage.setItem('data', JSON.stringify(dayData))
+            localStorage.setItem('eventData', JSON.stringify(eventData))
     }
 
     getAllData().catch((err) => {

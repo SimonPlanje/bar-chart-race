@@ -10,17 +10,13 @@ function App() {
 
   
   useEffect(() => {
-    fetchData(setbarRaceState, setEventState)
+
+      fetchData(setbarRaceState, setEventState)
+
       }, [])
 
-      useEffect(() => {
-        localStorage.setItem('data', JSON.stringify(barRaceState))
-      }, [barRaceState])
 
-    useEffect(() => {
-      localStorage.setItem('eventData', JSON.stringify(eventState))
-    }, [eventState])
-  
+
 
 
   return (
