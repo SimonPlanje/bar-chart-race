@@ -3,16 +3,13 @@ import {sliderBottom} from "d3-simple-slider"
 
 function BarchartRace() {
 
+    async function createBarChart(){
 
-    var data = JSON.parse(localStorage.getItem('data'))
-    var eventData = JSON.parse(localStorage.getItem('eventData'))
-console.log(localStorage.data)
-console.log(data)
-    if(data != null){
+        const data = await JSON.parse(localStorage.getItem('data'))
+        const eventData = await JSON.parse(localStorage.getItem('eventData'))
+        console.log(data)
 
-      console.log(data)
-
-      // The data from the "day dashboard" maintained by FTM
+              // The data from the "day dashboard" maintained by FTM
       let partijen = new Set(data.map(d => d.partij))
       console.log(partijen)
 
@@ -131,9 +128,9 @@ console.log(data)
 
     // Keyframes per political party name + previous and next frames for al parties
     // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
-    const nameframes = d3.groups(keyframes.flatMap(([, data]) => data), d => d.partij);
-    const prev = new Map(nameframes.flatMap(([, data]) => d3.pairs(data, (a, b) => [b, a])));
-    const next = new Map(nameframes.flatMap(([, data]) => d3.pairs(data)));
+    const nameframes = d3.groups(keyframes.flatMap(([, data]) => data), d => d.partij)
+    const prev = new Map(nameframes.flatMap(([, data]) => d3.pairs(data, (a, b) => [b, a])))
+    const next = new Map(nameframes.flatMap(([, data]) => d3.pairs(data)))
 
   console.log(nameframes)
 
@@ -158,7 +155,7 @@ console.log(data)
                     this.innerHTML = "Pauzeer";
                     render();
                 }
-            });
+            })
 
  // Slider for jumping to a specific date (keyframe), using D3 simple slider plugin
     // Values between 0 and last keyframe
@@ -183,7 +180,7 @@ console.log(data)
         .on('drag', val => {
             // When dragging slider > stop bar chart race animation, render with new value
             svg.interrupt() 
-            render(val);
+            render(val)
         });
 
 // Apend a new svg (for the slider) to the main bar chart div
@@ -194,19 +191,19 @@ const gFrameslider = d3
     .attr('height', 30)
     .attr('class', 'frameslider')
 .append('g')
-    .attr('transform', 'translate(32,10)');
+    .attr('transform', 'translate(32,10)')
 
-gFrameslider.call(sliderFrame);
+gFrameslider.call(sliderFrame)
 
   // Coverting the date strings to real date objects (unique values), used for the timeline
   const dataDates = [...(new Set(data.map(d => d.datum)))].map(function(d) {
     return new Date(d);
-});
+})
 
 // Coverting the month strings to real date objects (unique values), used for the timeline tick values
 const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
     return new Date(d);
-});
+})
 
 
   // Timeline below the keyframe slider. Used D3 simple slider plugin.
@@ -499,9 +496,14 @@ const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
       // Source: https://stackoverflow.com/questions/37624322/uncaught-in-promise-undefined-error-when-using-with-location-in-facebook-gra
       await transition.end().then(() => {}).catch(() => {});
   }
-    }else{
-        console.log("diddint found any data")
+
+
     }
+
+    createBarChart()
+
+
+
   
 
     return (
@@ -511,4 +513,3 @@ const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
   }
   
   export default BarchartRace;
-  

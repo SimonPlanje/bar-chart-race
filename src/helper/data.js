@@ -1,33 +1,41 @@
 import * as d3 from "d3"
 
+async function fetchData(setbarRaceState, setEventState, setDataState){
+
+    if(localStorage.data){
+        console.log('all clear')
+        setDataState('finished')
+
+        return
+    }else{
+        const daySpendDataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpwttasVjXReLn69FtOXSrwWxYjKqVSKiRenwS9xU76b_-NX6-YRYfRQEwm0ipV3sLAiNPrCz3uO7D/pub?gid=161211961&single=true&output=csv"
+        const eventDashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0ispSJft5GVxwMtalNZLqlwrk6j9Ig2azCOlGp0IGfrDbKTFBinaOpgGou1Nyz-_w2-sIqii0_DwK/pub?gid=0&single=true&output=csv"
+    
+        async function getData(name){
+            const data = await d3.csv(name)
+            return data
+        }
+    
+        async function getAllData() {
+                const dayData = await getData(daySpendDataURL)
+                const eventData = await getData(eventDashboardURL)
 
 
-const fetchData = (setbarRaceState, setEventState) =>{
+                localStorage.setItem("data", JSON.stringify(dayData))
+                localStorage.setItem("eventData", JSON.stringify(eventData))
+                setDataState('finished')
 
-    const daySpendDataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpwttasVjXReLn69FtOXSrwWxYjKqVSKiRenwS9xU76b_-NX6-YRYfRQEwm0ipV3sLAiNPrCz3uO7D/pub?gid=161211961&single=true&output=csv"
-    const eventDashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0ispSJft5GVxwMtalNZLqlwrk6j9Ig2azCOlGp0IGfrDbKTFBinaOpgGou1Nyz-_w2-sIqii0_DwK/pub?gid=0&single=true&output=csv"
 
-    async function getData(name){
-        const response = await d3.csv(name)
-        const data = response.json
-        return data
+
+                console.log(dayData)
+                console.log(eventData)
+        }
+    
+        getAllData().catch((err) => {
+            console.log(err)
+            console.log("handled!") 
+        })
     }
-
-
-    async function getAllData() {
-            const dayData = await getData(daySpendDataURL)
-            const eventData = await getData(eventDashboardURL)
-
-            console.log(dayData)
-            console.log(eventData)
-            localStorage.setItem('data', JSON.stringify(dayData))
-            localStorage.setItem('eventData', JSON.stringify(eventData))
-    }
-
-    getAllData().catch((err) => {
-        console.log(err)
-        console.log("handled!")
-    })
 
 
 } 
