@@ -6,15 +6,14 @@ import fetchData from './helper/data'
 
 function App() {
 
-  const [barRaceState, setbarRaceState] = useState(null)
-  const [eventState, setEventState] = useState(null)
+
   const [dataState, setDataState] = useState('loading')
 
 
   useEffect(() => {
 
       async function getData(){
-      await fetchData(setbarRaceState, setEventState, setDataState)
+      await fetchData(setDataState)
     }
 getData()
       }, [])
@@ -30,10 +29,12 @@ if(dataState === 'loading'){
 
   return (
     <div className="App">
-   <BarchartRace  barRaceState={barRaceState} eventState={eventState} />
+   <BarchartRace />
     </div>
   )
   }
+
+
 }
 
 export default App;

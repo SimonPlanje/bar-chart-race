@@ -1,6 +1,6 @@
 import * as d3 from "d3"
 
-async function fetchData(setbarRaceState, setEventState, setDataState){
+async function fetchData(setDataState){
 
     if(localStorage.data){
         console.log('all clear')
