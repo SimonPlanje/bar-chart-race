@@ -1,10 +1,21 @@
+:root {
+  --ftm-red: #dd3230;
+
+}
+
+button {
+  color: white;
+  background-color: var(--ftm-red);
+  border: none;
+  border-radius: .2em;
+  padding: 1em 2em;
+  margin: 1em;
+  cursor: pointer;
+}
+
 body {
   margin: 0;
   font-family: "PT Sans", sans-serif;
   font-size: small;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}

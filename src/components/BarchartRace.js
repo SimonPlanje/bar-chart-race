@@ -5,7 +5,7 @@ function BarchartRace() {
 
     async function createBarChart(){
 
-        const data = await JSON.parse(localStorage.getItem('data'))
+        const data = JSON.parse(localStorage.getItem('data'))
         const eventData = await JSON.parse(localStorage.getItem('eventData'))
         console.log(data)
 
@@ -47,8 +47,15 @@ function BarchartRace() {
 
     const height = margin.top + barSize * n + margin.bottom
 
+      // Appending SVG element to div
+      const svg = d3.select(".barchartdiv")
+      .append("svg")
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", "0 0 800 500")
+          .attr('class', 'barchart')
 
-        // Format numbers to local (Dutch) format 
+
+    // Format numbers to local (Dutch) format 
     // Sources: https://github.com/d3/d3-format#locale_format & https://observablehq.com/@d3/d3-format
     const numLocale = d3.formatLocale({
       "decimal": ",",
@@ -83,12 +90,7 @@ function BarchartRace() {
   function euroFormat(d) { return '€' + numLocale.format(",d")(d) }
 
 
-      // Appending SVG element to div
-      const svg = d3.select(".barchartdiv")
-      .append("svg")
-          .attr("width", width)
-          .attr("height", height)
-          .attr('class', 'barchart')
+
 
     // Setting X & Y scales
     const x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
@@ -187,8 +189,8 @@ function BarchartRace() {
 const gFrameslider = d3
 .select('.barchartdiv')
 .append('svg')
-    .attr('width', width)
-    .attr('height', 30)
+.attr("preserveAspectRatio", "xMinYMin meet")
+.attr("viewBox", "0 0 800 20")
     .attr('class', 'frameslider')
 .append('g')
     .attr('transform', 'translate(32,10)')
@@ -222,8 +224,8 @@ const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
         .select('.barchartdiv')
         .append('svg')
             .attr('class', 'scaledates')
-            .attr('width', width)
-            .attr('height', 55)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 800 60")
         .append('g')
             .attr('transform', 'translate(26.5,17)');
 
