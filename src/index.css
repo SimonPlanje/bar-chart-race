@@ -4,6 +4,7 @@
 }
 
 button {
+  text-align: center;
   color: white;
   background-color: var(--ftm-red);
   border: none;
@@ -11,7 +12,9 @@ button {
   padding: 1em 2em;
   margin: 1em;
   cursor: pointer;
+  width: 8em;
 }
+
 
 body {
   margin: 0;
