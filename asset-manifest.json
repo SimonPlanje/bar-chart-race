@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/barchartRace/static/css/main.e21a24b2.chunk.css",
+    "main.js": "/barchartRace/static/js/main.16ada587.chunk.js",
+    "main.js.map": "/barchartRace/static/js/main.16ada587.chunk.js.map",
+    "runtime-main.js": "/barchartRace/static/js/runtime-main.d81ed477.js",
+    "runtime-main.js.map": "/barchartRace/static/js/runtime-main.d81ed477.js.map",
+    "static/js/2.f8e62b20.chunk.js": "/barchartRace/static/js/2.f8e62b20.chunk.js",
+    "static/js/2.f8e62b20.chunk.js.map": "/barchartRace/static/js/2.f8e62b20.chunk.js.map",
+    "static/js/3.c7d6d690.chunk.js": "/barchartRace/static/js/3.c7d6d690.chunk.js",
+    "static/js/3.c7d6d690.chunk.js.map": "/barchartRace/static/js/3.c7d6d690.chunk.js.map",
+    "index.html": "/barchartRace/index.html",
+    "static/css/main.e21a24b2.chunk.css.map": "/barchartRace/static/css/main.e21a24b2.chunk.css.map",
+    "static/js/2.f8e62b20.chunk.js.LICENSE.txt": "/barchartRace/static/js/2.f8e62b20.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d81ed477.js",
+    "static/js/2.f8e62b20.chunk.js",
+    "static/css/main.e21a24b2.chunk.css",
+    "static/js/main.16ada587.chunk.js"
+  ]
+}
