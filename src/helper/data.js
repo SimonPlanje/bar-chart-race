@@ -37,7 +37,6 @@ async function fetchData(setDataState){
         })
     }
 
-
 } 
 
 export default fetchData

@@ -5,11 +5,16 @@ function BarchartRace() {
 
     async function createBarChart(){
 
-        const data = JSON.parse(localStorage.getItem('data'))
+        const importedData = JSON.parse(localStorage.getItem('data'))
+        //remove the useless zero value out of the dataset
+        const data = importedData.filter(d => d.partij !== '0')
+
         const eventData = await JSON.parse(localStorage.getItem('eventData'))
+
+
         console.log(data)
 
-        // The data from the "day dashboard" maintained by FTM
+      // The data from the "day dashboard" maintained by FTM
       let partijen = new Set(data.map(d => d.partij))
       console.log(partijen)
 
@@ -28,10 +33,12 @@ function BarchartRace() {
 
 
     // Display settings
-    const width = 750;
+    //source: https://stackoverflow.com/questions/1248081/how-to-get-the-browser-viewport-dimensions
+    const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     const margin = ({top: 16, right: 80, bottom: 65, left: 5})
     const barSize = 37
 
+ 
     // Maximum number of bars
     const n = 13
 
@@ -40,16 +47,16 @@ function BarchartRace() {
     const k = 1
 
     // Duration between keyframes (in milliseconds)
-    const duration = 350
+    const duration = 200
 
-    // const height = margin.top + barSize * n + margin.bottom
+    const height = margin.top + barSize * n + margin.bottom
 
       // Appending SVG element to div
       const svg = d3.select(".barchartdiv")
       .append("svg")
-      .attr("preserveAspectRatio", "xMinYMin meet")
-      .attr("viewBox", "0 0 800 500")
-          .attr('class', 'barchart')
+      .attr("width", width)
+      .attr("height", height)
+      .attr('class', 'barchart')
 
 
     // Format numbers to local (Dutch) format 
@@ -131,25 +138,24 @@ function BarchartRace() {
     const next = new Map(nameframes.flatMap(([, data]) => d3.pairs(data)))
 
 
-   // Appending a start/stop button, used for pausing and (re)-starting the animation
-    // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
-    d3.select(".barchartdiv")
-        .append("button")
-            .attr("class", "controlsRedButton")
-            .text("Pauzeer")
-            .on("click", function(e) {
-              console.log(e)
-                if (this.innerHTML === "Pauzeer") {
-                    this.innerHTML = "Hervat";
-                    stop();
-                } else if (this.innerHTML === "Hervat") {
-                    this.innerHTML = "Pauzeer";
-                    start();
-                } else {
-                    this.innerHTML = "Pauzeer";
-                    render();
-                }
-            })
+//    // Appending a start/stop button, used for pausing and (re)-starting the animation
+//     // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
+//     d3.select(".barchartdiv")
+//         .append("button")
+//             .attr("class", "controls red button")
+//             .text("Pauzeer")
+//             .on("click", function() {
+//                 if (this.innerHTML === "Pauzeer") {
+//                     this.innerHTML = "Hervat";
+//                     stop();
+//                 } else if (this.innerHTML === "Hervat") {
+//                     this.innerHTML = "Pauzeer";
+//                     start();
+//                 } else {
+//                     this.innerHTML = "Pauzeer";
+//                     render();
+//                 }
+//             });
 
  // Slider for jumping to a specific date (keyframe), using D3 simple slider plugin
     // Values between 0 and last keyframe
@@ -158,7 +164,7 @@ function BarchartRace() {
         sliderBottom()
         .min(0)
         .max((keyframes.length) - 1)
-        .width(width-margin.right+30)
+        .width(width-100)
         .step(1)
         .fill('var(--ftm-red)')
         .handle(
@@ -177,93 +183,96 @@ function BarchartRace() {
             render(val)
         });
 
+
+
 // Apend a new svg (for the slider) to the main bar chart div
 const gFrameslider = d3
 .select('.barchartdiv')
 .append('svg')
-.attr("preserveAspectRatio", "xMinYMin meet")
-.attr("viewBox", "0 0 800 20")
+.attr("width", width)
+.attr("height", 20)
     .attr('class', 'frameslider')
 .append('g')
     .attr('transform', 'translate(32,10)')
 
 gFrameslider.call(sliderFrame)
 
-//   // Coverting the date strings to real date objects (unique values), used for the timeline
-//   const dataDates = [...(new Set(data.map(d => d.datum)))].map(function(d) {
-//     return new Date(d);
-// })
+  // Coverting the date strings to real date objects (unique values), used for the timeline
+  const dataDates = [...(new Set(data.map(d => d.datum)))].map(function(d) {
+    return new Date(d);
+})
 
-// // Coverting the month strings to real date objects (unique values), used for the timeline tick values
-// const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
-//     return new Date(d);
-// })
+// Coverting the month strings to real date objects (unique values), used for the timeline tick values
+const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
+    return new Date(d);
+})
 
 
-//   // Timeline below the keyframe slider. Used D3 simple slider plugin.
-//     // Values are dates (in stead of keyframe numbers that are used with the slider)
-//     // Sources: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518 & https://github.com/johnwalley/d3-simple-slider
-//     const timeline =
-//         sliderBottom()
-//         .min(d3.min(dataDates))
-//         .max(d3.max(dataDates))
-//         .width(width-margin.right+30)
-//         .tickFormat(timeLocale.utcFormat('%B'))
-//         .tickValues(dataMonths);
+  // Timeline below the keyframe slider. Used D3 simple slider plugin.
+    // Values are dates (in stead of keyframe numbers that are used with the slider)
+    // Sources: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518 & https://github.com/johnwalley/d3-simple-slider
+    const timeline =
+        sliderBottom()
+        .min(d3.min(dataDates))
+        .max(d3.max(dataDates))
+        .width(width-margin.right+30)
+        .tickFormat(timeLocale.utcFormat('%B'))
+        .tickValues(dataMonths);
     
-    // // Append a new svg for the timeline within the main bar chart div. 
-    // const gTimeline = d3
-    //     .select('.barchartdiv')
-    //     .append('svg')
-    //         .attr('class', 'scaledates')
-    //         .attr("preserveAspectRatio", "xMinYMin meet")
-    //         .attr("viewBox", "0 0 800 60")
-    //     .append('g')
-    //         .attr('transform', 'translate(26.5,17)');
+    // Append a new svg for the timeline within the main bar chart div. 
+    const gTimeline = d3
+        .select('.barchartdiv')
+        .append('svg')
+            .attr('class', 'scaledates')
+        .attr('width', width)
+        .attr('height', 40)
+        .append('g')
+            .attr('transform', 'translate(26.5,17)');
 
-    // gTimeline.call(timeline);
+    gTimeline.call(timeline);
 
 
-    // // Create a time scale with d3.scaleTime, used for plotting the circles on the correct dates
-    // // Source: https://observablehq.com/@d3/d3-scaletime#scaleUtc
-    // const xTime = d3.scaleTime()
-    // .domain([keyframes[0][0], keyframes[(keyframes.length) - 1][0]])
-    // .range([0, width-30]);
+    // Create a time scale with d3.scaleTime, used for plotting the circles on the correct dates
+    // Source: https://observablehq.com/@d3/d3-scaletime#scaleUtc
+    const xTime = d3.scaleTime()
+    .domain([keyframes[0][0], keyframes[(keyframes.length) - 1][0]])
+    .range([0, width-100]);
     
-    // // Append a div to the body, used as a tooltip
-    // const div = d3.select("body").append("div")	
-    // .attr("class", "tooltip")				
-    // .style("opacity", 0);
+    // Append a div to the body, used as a tooltip
+    const div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
 
     // Append circles to the timeline group, using the eventData (used for displaying political events)
-    // gTimeline.selectAll("eventCircles")
-    //     .data(eventData)
-    //     .enter()
-    //     .append('circle')
-    //         .attr('cx', function (d) {
-    //             const cx = xTime(new Date(d.datum));
-    //             return cx;
-    //         })
-    //         .attr('cy', "-3")
-    //         .attr('r', "5.5")
-    //         .attr("fill", d => color(d.partij))
-    //         .style("opacity", 1)
-    //         .on("mouseover", function(event, d) {
-    //         // On hover, display the tooltip. Source: https://bl.ocks.org/d3noob/180287b6623496dbb5ac4b048813af52
-    //         d3.select(this).style("opacity", .3);	
-    //         div.transition()		
-    //             .duration(200)		
-    //             .style("opacity", .9);		
-    //         div.html(`${d.gebeurtenis}`)	
-    //             .style("left", (event.pageX - 20) + "px")		
-    //             .style("top", (event.pageY + 17) + "px");	
-    //         })					
-    //         .on("mouseout", function() {
-    //             d3.select(this).style("opacity", 1);			
-    //             div.transition()		
-    //                 .duration(500)		
-    //                 .style("opacity", 0);	
-    //         });
+    gTimeline.selectAll("eventCircles")
+        .data(eventData)
+        .enter()
+        .append('circle')
+            .attr('cx', function (d) {
+                const cx = xTime(new Date(d.datum));
+                return cx;
+            })
+            .attr('cy', "-3")
+            .attr('r', "10")
+            .attr("fill", d => color(d.partij))
+            .style("opacity", .8)
+            .on("mouseover", function(event, d) {
+            
+                // On hover, display the tooltip. Source: https://bl.ocks.org/d3noob/180287b6623496dbb5ac4b048813af52
+            d3.select(this).style("opacity", .3);	
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div.html(`${d.gebeurtenis}`)	
+                .style("left", (event.pageX - 20) + "px")		
+                .style("top", (event.pageY + 17) + "px");	
+            })					
+            .on("mouseout", function() {
+                d3.select(this).style("opacity", 1);			
+                div.transition()		
+                    .duration(500)		
+                    .style("opacity", 0);	
+            });
 
     // Function used to generate the top-axis of the bar chart race, using d3.axisTop
     // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
@@ -290,12 +299,11 @@ gFrameslider.call(sliderFrame)
   // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
   function ticker(svg) {
       const displayedDate = svg.append("text")
-          .style("font", `bold 1em var(--ftm-graph)`)
-          .style("font-variant-numeric", "tabular-nums")
           .attr("text-anchor", "end")
-          .attr("x", width - 6)
+          .attr("x", width - 100)
           .attr("y", margin.top + barSize * (n + 1))
           .attr("dy", "0.32em")
+          .style('font-size', '2em')
           .text(formatDate(keyframes[0][0]));
 
       return ([date], transition) => {
@@ -400,6 +408,13 @@ gFrameslider.call(sliderFrame)
           .attr("text-anchor", "start")
           .selectAll("text");
 
+
+          //remove all the 
+          d3.selectAll(".tick").selectAll("line").remove();
+          d3.selectAll(".tick").selectAll("text").remove()
+          d3.selectAll(".slider").selectAll(".parameter-value").selectAll('text').remove()
+
+
       return ([, data], transition) => label = label
           .data(data.slice(0, n), d => d.partij)
           .join(
@@ -428,17 +443,17 @@ gFrameslider.call(sliderFrame)
   // CurrentDataSetIndex registers the number of the displayed keyframe. 
   // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
   let elapsedTime = duration;
-  let currentDataSetIndex = 0;
+//   let currentDataSetIndex = 0;
 
-  function stop() {
-      console.log("STOP");
-      svg.interrupt();
-  }
+//   function stop() {
+//       console.log("STOP");
+//       svg.interrupt();
+//   }
 
-  function start() {
-      render(currentDataSetIndex);
-      console.log("START");
-  }
+//   function start() {
+//       render(currentDataSetIndex);
+//       console.log("START");
+//   }
 
   // Functions that are called to update the parts of the bar chart race.
   // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
@@ -454,7 +469,7 @@ gFrameslider.call(sliderFrame)
   // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd 
   async function render(index = 0) {
 
-      currentDataSetIndex = index;
+    //   currentDataSetIndex = index;
 
       const transition = svg.transition()
       .duration(elapsedTime)
@@ -472,6 +487,7 @@ gFrameslider.call(sliderFrame)
           }
       })
       .on("interrupt", () => {
+
           console.log("INTERRUPTED");
       });
       
@@ -494,7 +510,7 @@ gFrameslider.call(sliderFrame)
     createBarChart()
 
     return (
-      <div className="barchartdiv">
+      <div className="barchartdiv" width="100%">
       </div>
     );
   }
