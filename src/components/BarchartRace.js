@@ -164,7 +164,7 @@ function BarchartRace() {
         sliderBottom()
         .min(0)
         .max((keyframes.length) - 1)
-        .width(width-100)
+        .width(width-60)
         .step(1)
         .fill('var(--ftm-red)')
         .handle(
@@ -236,7 +236,7 @@ const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
     // Source: https://observablehq.com/@d3/d3-scaletime#scaleUtc
     const xTime = d3.scaleTime()
     .domain([keyframes[0][0], keyframes[(keyframes.length) - 1][0]])
-    .range([0, width-100]);
+    .range([0, width-60]);
     
     // Append a div to the body, used as a tooltip
     const div = d3.select("body").append("div")	
