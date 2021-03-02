@@ -56,6 +56,13 @@ svg.frameslider path.handle:hover {
   cursor: grab;
 }
 
+svg.frameslider,
+.track-overlay,
+.track-fill,
+:hover {
+  cursor: pointer;
+}
+
 svg.frameslider path.handle:focus {
   outline: none;
   box-shadow: none;
@@ -78,4 +85,8 @@ div.tooltipstack {
   border-radius: 8px;
   pointer-events: none;
   color: white;
+}
+
+.slider line {
+  stroke-width: 10;
 }

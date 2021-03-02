@@ -35,7 +35,7 @@ function BarchartRace() {
     // Display settings
     //source: https://stackoverflow.com/questions/1248081/how-to-get-the-browser-viewport-dimensions
     const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    const margin = ({top: 16, right: 80, bottom: 65, left: 5})
+    const margin = ({top: 16, right: 90, bottom: 65, left: 5})
     const barSize = 37
 
  
@@ -164,7 +164,7 @@ function BarchartRace() {
         sliderBottom()
         .min(0)
         .max((keyframes.length) - 1)
-        .width(width-60)
+        .width(width- 80)
         .step(1)
         .fill('var(--ftm-red)')
         .handle(
@@ -243,37 +243,41 @@ const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
     .attr("class", "tooltip")				
     .style("opacity", 0);
 
-    // Append circles to the timeline group, using the eventData (used for displaying political events)
-    gTimeline.selectAll("eventCircles")
-        .data(eventData)
-        .enter()
-        .append('circle')
-            .attr('cx', function (d) {
-                const cx = xTime(new Date(d.datum));
-                return cx;
-            })
-            .attr('cy', "-3")
-            .attr('r', "10")
-            .attr("fill", d => color(d.partij))
-            .style("opacity", .8)
-            .on("mouseover", function(event, d) {
-            
-                // On hover, display the tooltip. Source: https://bl.ocks.org/d3noob/180287b6623496dbb5ac4b048813af52
-            d3.select(this).style("opacity", .3);	
-            div.transition()		
-                .duration(200)		
-                .style("opacity", .9);		
-            div.html(`${d.gebeurtenis}`)	
-                .style("left", (event.pageX - 20) + "px")		
-                .style("top", (event.pageY + 17) + "px");	
-            })					
-            .on("mouseout", function() {
-                d3.select(this).style("opacity", 1);			
-                div.transition()		
-                    .duration(500)		
-                    .style("opacity", 0);	
-            });
+    if(width > 400){
+// Append circles to the timeline group, using the eventData (used for displaying political events)
+gTimeline.selectAll("eventCircles")
+.data(eventData)
+.enter()
+.append('circle')
+    .attr('cx', function (d) {
+        const cx = xTime(new Date(d.datum));
+        return cx;
+    })
+    .attr('cy', "-3")
+    .attr('r', "10")
+    .attr("fill", d => color(d.partij))
+    .style("opacity", .8)
+    .on("mouseover", function(event, d) {
+    
+        // On hover, display the tooltip. Source: https://bl.ocks.org/d3noob/180287b6623496dbb5ac4b048813af52
+    d3.select(this).style("opacity", .3);	
+    div.transition()		
+        .duration(200)		
+        .style("opacity", .9);		
+    div.html(`${d.gebeurtenis}`)	
+        .style("left", (event.pageX - 20) + "px")		
+        .style("top", (event.pageY - 54) + "px");	
+    })					
+    .on("mouseout", function() {
+        d3.select(this).style("opacity", 1);			
+        div.transition()		
+            .duration(500)		
+            .style("opacity", 0);	
+    });
 
+    }
+
+    
     // Function used to generate the top-axis of the bar chart race, using d3.axisTop
     // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
     function axis(svg) {
