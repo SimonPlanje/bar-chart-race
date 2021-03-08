@@ -320,47 +320,59 @@ gTimeline.selectAll("eventCircles")
         let color = "";
         switch(party) {
             case "D66":
-                color = "#B2DF8A";                
+                color = "#b2df8a";                
             break;
             case "Forum voor Democratie":
             case "FvD":
-                color = "#9C1616";                
+                color = "#9c1616";                
             break;
             case "VVD":
                 color = "#FA9600";                
             break;
             case "GroenLinks":
-                color = "#43B825";                
+                color = "#45b825";                
             break;
             case "CDA":
-                color = "#438A69";                
+                color = "#428a69";                
             break;
             case "PvdA":
-                color = "#FB9B98";                
+                color = "#fb9a99";                
             break;
             case "SP":
-                color = "#DC3230";                
+                color = "#DD3230";                
             break;
             case "PvdD":
-                color = "#B15929";                
+                color = "#b15928";                
             break;
             case "SGP":
-                color = "#F0F025";                
+                color = "#f0f026";                
             break;
             case "DENK":
-                color = "#53C5C9";                
+                color = "#53c5c9";                
             break;
             case "CU":
             case "Christen Unie":
             case "ChristenUnie":
-                color = "#1F78B4";                
+                color = "#1f78b4";                
             break;
             case "50 Plus":
             case "50Plus":
-                color = "#972EBA";                
+                color = "#972dba";                
             break;
             case "PVV":
-                color = "#88C6C1";                
+                color = "#87C6C2";                
+            break;
+            case "Code Oranje":
+                color = "#C85716";                
+            break;
+            case "JA21":
+                color = "#000080";                
+            break;
+            case "Bij1":
+                color = "#f85080";                
+            break;
+            case "Volt":
+                color = "#291749";                
             break;
             default:
                 color = "var(--link-color)";                
