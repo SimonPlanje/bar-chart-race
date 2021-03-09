@@ -4,12 +4,11 @@ import { sliderBottom } from 'd3-simple-slider';
 export default function BarchartRace({ data, eventData }) {
   //remove the useless zero value out of the dataset
   data = data.filter((d) => d.partij !== '0');
-  console.log(data);
-  console.log(eventData);
+  // console.log(data);
+  // console.log(eventData);
 
   // The data from the "day dashboard" maintained by FTM
   let partijen = new Set(data.map((d) => d.partij));
-
   // Unique political party names
   let partijNames = d3.group(data, (d) => d.partij);
 
@@ -147,7 +146,7 @@ export default function BarchartRace({ data, eventData }) {
     return data;
   }
 
-  console.log(rank((name) => datevalues[0][1].get(name)));
+  // console.log(rank((name) => datevalues[0][1].get(name)));
 
   // Creating keyframes: frames (per day) that display the ranking and spendings of political parties
   // Used for animating between values
@@ -562,7 +561,7 @@ export default function BarchartRace({ data, eventData }) {
   // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
   async function render(index = 0) {
     //   currentDataSetIndex = index;
-
+    
     const transition = svg
       .transition()
       .duration(elapsedTime)

@@ -25,8 +25,8 @@ function App() {
   
   return (
     <div className="App">
-      {view == 'loading' && <Loading  />}
-      {view == 'barchart' && <BarchartRace data={dayData} eventData={eventData} />}
+      {view === 'loading' && <Loading  />}
+      {view === 'barchart' && <BarchartRace data={dayData} eventData={eventData} />}
     </div>
   )
 
