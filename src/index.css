@@ -50,6 +50,7 @@ body {
   margin: 0;
   font-family: 'IBM Plex Sans';
   font-size: small;
+  overflow: hidden;
 }
 
 svg.frameslider path.handle:hover {
