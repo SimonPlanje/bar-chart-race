@@ -37,11 +37,11 @@ export default function BarchartRace({ data, eventData }) {
       document.documentElement.clientWidth || 0,
       window.innerWidth || 0
     );
-    const margin = { top: 16, right: 100, bottom: 65, left: 5 };
+    const margin = { top: 16, right: 120, bottom: 65, left: 5 };
     const barSize = 37;
 
     // Maximum number of bars
-    const n = 13;
+    const n = 17;
 
     // Speed between dates displayed (used for keyframes)
     // The higher the number, the slower the total duration of the animation
