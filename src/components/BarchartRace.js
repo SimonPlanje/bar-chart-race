@@ -13,6 +13,7 @@ export default function BarchartRace({ data, eventData }) {
 
     // The data from the "day dashboard" maintained by FTM
     let partijen = new Set(data.map((d) => d.partij));
+    console.log(partijen)
     // Unique political party names
     let partijNames = d3.group(data, (d) => d.partij);
 
@@ -38,10 +39,10 @@ export default function BarchartRace({ data, eventData }) {
       window.innerWidth || 0
     );
     const margin = { top: 16, right: 120, bottom: 65, left: 5 };
-    const barSize = 37;
+    const barSize = 33;
 
     // Maximum number of bars
-    const n = 17;
+    const n = 15;
 
     // Speed between dates displayed (used for keyframes)
     // The higher the number, the slower the total duration of the animation
@@ -422,8 +423,10 @@ export default function BarchartRace({ data, eventData }) {
           color = '#000080';
           break;
         case 'Bij1':
+        case 'BIJ1':
           color = '#f85080';
           break;
+        case 'Volt Nederland':
         case 'Volt':
           color = '#291749';
           break;
