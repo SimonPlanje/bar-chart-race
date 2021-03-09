@@ -3,6 +3,8 @@ import { sliderBottom } from 'd3-simple-slider';
 import React, { useEffect} from 'react'
 
 export default function BarchartRace({ data, eventData }) {
+  d3.select('.barchartdiv').selectAll('svg').remove()
+
   useEffect(() => {
     //remove the useless zero value out of the dataset
     data = data.filter((d) => d.partij !== '0');
