@@ -13,10 +13,10 @@ function BarchartRace() {
 
 
         console.log(data)
+        console.log(eventData)
 
       // The data from the "day dashboard" maintained by FTM
       let partijen = new Set(data.map(d => d.partij))
-      console.log(partijen)
 
 
       // Unique political party names
@@ -84,7 +84,7 @@ function BarchartRace() {
   // Function used to format numbers to rounded "local" number
   const formatNumber = numLocale.format(",d")
 
-  console.log(formatNumber)
+//   console.log(formatNumber)
 
   // Function used to format numbers to dd-mmmm-yyyy format (eg. 4 november 2020)
   // %e instead of %d to get "4" instead of "04". Source: https://github.com/d3/d3-time-format#locale_format
