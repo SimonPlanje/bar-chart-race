@@ -355,21 +355,39 @@ export default function BarchartRace({ data, eventData }) {
           break;
         case 'Forum voor Democratie':
         case 'FvD':
+        case 'Thierry Baudet':
           color = '#9c1616';
           break;
         case 'VVD':
+        case 'Klaas Dijkhoff':
+        case 'Silvio Erkens':
           color = '#FA9600';
           break;
         case 'GroenLinks':
+        case 'Bas Eickhout':
+        case 'Jesse Klaver':  
           color = '#45b825';
           break;
         case 'CDA':
+        case 'Agnes Mulder':
+        case 'Chris van Dam':
+        case  'Harmen Krul':
+        case 'Harry van der Molen':
+        case 'Henri Bontenbal':
+        case 'Jaco Geurts':
+        case 'Lucille Werner':
+        case  'Martijn van Helvert':
+        case 'Mustafa Amhaouch':
+        case 'Raymond Knops':
+        case 'René Peters':
+        case 'Wopke Hoekstra':
           color = '#428a69';
           break;
         case 'PvdA':
           color = '#fb9a99';
           break;
         case 'SP':
+        case 'Lilian Marijnissen':
           color = '#DD3230';
           break;
         case 'PvdD':
@@ -384,6 +402,7 @@ export default function BarchartRace({ data, eventData }) {
         case 'CU':
         case 'Christen Unie':
         case 'ChristenUnie':
+        case 'Gert-Jan Segers':
           color = '#1f78b4';
           break;
         case '50 Plus':
@@ -397,6 +416,7 @@ export default function BarchartRace({ data, eventData }) {
           color = '#C85716';
           break;
         case 'JA21':
+        case 'Jan Cees Vogelaar':
           color = '#000080';
           break;
         case 'Bij1':
@@ -424,7 +444,7 @@ export default function BarchartRace({ data, eventData }) {
                 .append('rect')
                 .attr('fill', (d) => color(d.partij))
                 .attr('height', y.bandwidth())
-                .attr('x', x(0))
+                .attr('x', margin.left)
                 .attr('y', (d) => y((prev.get(d) || d).ranking))
                 .attr('width', (d) => x((prev.get(d) || d).midden) - x(0)),
             (update) => update,

@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
 
     async function getData(){
-      const daySpendDataURL = "https://docs.google.com/spreadsheets/d/1zBQlY4VlalwP2sXshquH8zwrWmLfS5F0K5cF8RJKyNU/export?format=csv"
+      const daySpendDataURL = "https://docs.google.com/spreadsheets/d/1J4ivHKK5Ttj0-3ME1KQPt4wVwlkrfGkenyEhlo1OnOg/export?format=csv"
       const eventDashboardURL = "https://docs.google.com/spreadsheets/d/1UkvW4wmthdvaaWvvJS_R5CUiCJZXz6fPDlIKE3ulmjM/export?format=csv"
       await setDayData(await fetchData(daySpendDataURL))
       await setEventData(await fetchData(eventDashboardURL))
