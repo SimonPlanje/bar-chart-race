@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/bar-chart-race/static/css/main.a99a8864.chunk.css",
-    "main.js": "/bar-chart-race/static/js/main.96163483.chunk.js",
-    "main.js.map": "/bar-chart-race/static/js/main.96163483.chunk.js.map",
+    "main.js": "/bar-chart-race/static/js/main.3da2500c.chunk.js",
+    "main.js.map": "/bar-chart-race/static/js/main.3da2500c.chunk.js.map",
     "runtime-main.js": "/bar-chart-race/static/js/runtime-main.b4386ef9.js",
     "runtime-main.js.map": "/bar-chart-race/static/js/runtime-main.b4386ef9.js.map",
-    "static/js/2.cfc8213c.chunk.js": "/bar-chart-race/static/js/2.cfc8213c.chunk.js",
-    "static/js/2.cfc8213c.chunk.js.map": "/bar-chart-race/static/js/2.cfc8213c.chunk.js.map",
+    "static/js/2.fb4c3d0b.chunk.js": "/bar-chart-race/static/js/2.fb4c3d0b.chunk.js",
+    "static/js/2.fb4c3d0b.chunk.js.map": "/bar-chart-race/static/js/2.fb4c3d0b.chunk.js.map",
     "static/js/3.8c2d99a9.chunk.js": "/bar-chart-race/static/js/3.8c2d99a9.chunk.js",
     "static/js/3.8c2d99a9.chunk.js.map": "/bar-chart-race/static/js/3.8c2d99a9.chunk.js.map",
     "index.html": "/bar-chart-race/index.html",
     "static/css/main.a99a8864.chunk.css.map": "/bar-chart-race/static/css/main.a99a8864.chunk.css.map",
-    "static/js/2.cfc8213c.chunk.js.LICENSE.txt": "/bar-chart-race/static/js/2.cfc8213c.chunk.js.LICENSE.txt"
+    "static/js/2.fb4c3d0b.chunk.js.LICENSE.txt": "/bar-chart-race/static/js/2.fb4c3d0b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.b4386ef9.js",
-    "static/js/2.cfc8213c.chunk.js",
+    "static/js/2.fb4c3d0b.chunk.js",
     "static/css/main.a99a8864.chunk.css",
-    "static/js/main.96163483.chunk.js"
+    "static/js/main.3da2500c.chunk.js"
   ]
 }
