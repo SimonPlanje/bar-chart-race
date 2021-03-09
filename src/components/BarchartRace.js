@@ -37,7 +37,7 @@ export default function BarchartRace({ data, eventData }) {
       document.documentElement.clientWidth || 0,
       window.innerWidth || 0
     );
-    const margin = { top: 16, right: 90, bottom: 65, left: 5 };
+    const margin = { top: 16, right: 100, bottom: 65, left: 5 };
     const barSize = 37;
 
     // Maximum number of bars
