@@ -45,10 +45,10 @@ export default function BarchartRace({ data, eventData }) {
 
     // Speed between dates displayed (used for keyframes)
     // The higher the number, the slower the total duration of the animation
-    const k = 1;
+    const k = 1.5;
 
     // Duration between keyframes (in milliseconds)
-    const duration = 200;
+    const duration = 100;
 
     const height = margin.top + barSize * n + margin.bottom;
 
