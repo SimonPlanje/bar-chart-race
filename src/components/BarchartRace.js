@@ -1,71 +1,63 @@
 import * as d3 from "d3"
 import {sliderBottom} from "d3-simple-slider"
 
-function BarchartRace() {
+export default function BarchartRace({ data, eventData }) {
+  //remove the useless zero value out of the dataset
+  data = data.filter(d => d.partij !== '0')
+  console.log(data)
+  console.log(eventData)
 
-    async function createBarChart(){
-
-        const importedData = JSON.parse(localStorage.getItem('data'))
-        //remove the useless zero value out of the dataset
-        const data = importedData.filter(d => d.partij !== '0')
-
-        const eventData = await JSON.parse(localStorage.getItem('eventData'))
-
-
-        console.log(data)
-        console.log(eventData)
-
-      // The data from the "day dashboard" maintained by FTM
-      let partijen = new Set(data.map(d => d.partij))
+  // The data from the "day dashboard" maintained by FTM
+  let partijen = new Set(data.map(d => d.partij))
 
 
-      // Unique political party names
-      let partijNames = d3.group(data, d => d.partij)
+  // Unique political party names
+  let partijNames = d3.group(data, d => d.partij)
 
 
-    // Spending per unique date per political party
-    // d.midden = average cumulative value
-    // d.datum = date
-    // d.partij = political party name
-    const datevalues = Array.from(d3.rollup(data, ([d]) => d.midden, d => d.datum, d => d.partij))
-    .map(([date, data]) => [new Date(date), data])
-    .sort(([a], [b]) => d3.ascending(a, b));
+  // Spending per unique date per political party
+  // d.midden = average cumulative value
+  // d.datum = date
+  // d.partij = political party name
+  const datevalues = Array.from(d3.rollup(data, ([d]) => d.midden, d => d.datum, d => d.partij))
+  .map(([date, data]) => [new Date(date), data])
+  .sort(([a], [b]) => d3.ascending(a, b));
 
 
-    // Display settings
-    //source: https://stackoverflow.com/questions/1248081/how-to-get-the-browser-viewport-dimensions
-    const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    const margin = ({top: 16, right: 90, bottom: 65, left: 5})
-    const barSize = 37
-
- 
-    // Maximum number of bars
-    const n = 13
-
-    // Speed between dates displayed (used for keyframes)
-    // The higher the number, the slower the total duration of the animation
-    const k = 1
-
-    // Duration between keyframes (in milliseconds)
-    const duration = 200
-
-    const height = margin.top + barSize * n + margin.bottom
-
-      // Appending SVG element to div
-      const svg = d3.select(".barchartdiv")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr('class', 'barchart')
+  // Display settings
+  //source: https://stackoverflow.com/questions/1248081/how-to-get-the-browser-viewport-dimensions
+  const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+  const margin = ({top: 16, right: 90, bottom: 65, left: 5})
+  const barSize = 37
 
 
-    // Format numbers to local (Dutch) format 
-    // Sources: https://github.com/d3/d3-format#locale_format & https://observablehq.com/@d3/d3-format
-    const numLocale = d3.formatLocale({
-      "decimal": ",",
-      "thousands": ".",
-      "grouping": [3],
-      "currency": ["€", ""]
+  // Maximum number of bars
+  const n = 13
+
+  // Speed between dates displayed (used for keyframes)
+  // The higher the number, the slower the total duration of the animation
+  const k = 1
+
+  // Duration between keyframes (in milliseconds)
+  const duration = 200
+
+  const height = margin.top + barSize * n + margin.bottom
+
+    // Appending SVG element to div
+    const svg = d3.select(".barchartdiv")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr('class', 'barchart')
+
+
+  // Format numbers to local (Dutch) format 
+  // Sources: https://github.com/d3/d3-format#locale_format & https://observablehq.com/@d3/d3-format
+  const numLocale = d3.formatLocale({
+    "decimal": ",",
+    "thousands": ".",
+    "grouping": [3],
+    "currency": ["€", ""]
   })
 
   // Format time and dates to local (Dutch) format
@@ -84,7 +76,7 @@ function BarchartRace() {
   // Function used to format numbers to rounded "local" number
   const formatNumber = numLocale.format(",d")
 
-//   console.log(formatNumber)
+  //   console.log(formatNumber)
 
   // Function used to format numbers to dd-mmmm-yyyy format (eg. 4 november 2020)
   // %e instead of %d to get "4" instead of "04". Source: https://github.com/d3/d3-time-format#locale_format
@@ -96,39 +88,39 @@ function BarchartRace() {
 
 
 
-    // Setting X & Y scales
-    const x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
-    const y = d3.scaleBand()
-    .domain(d3.range(n + 1))
-    .rangeRound([margin.top, margin.top + barSize * (n + 1 + 0.1)])
-    .padding(0.1);
+  // Setting X & Y scales
+  const x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
+  const y = d3.scaleBand()
+  .domain(d3.range(n + 1))
+  .rangeRound([margin.top, margin.top + barSize * (n + 1 + 0.1)])
+  .padding(0.1);
 
-    // Create a ranking for all political parties per day
-    // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
-    function rank(value) {
-      const data = Array.from(partijen, partij => ({partij, midden: value(partij)}));
-      data.sort((a, b) => d3.descending(a.midden, b.midden));
-      for (let i = 0; i < data.length; ++i) data[i].ranking = Math.min(n, i);
-      return data;
+  // Create a ranking for all political parties per day
+  // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
+  function rank(value) {
+    const data = Array.from(partijen, partij => ({partij, midden: value(partij)}));
+    data.sort((a, b) => d3.descending(a.midden, b.midden));
+    for (let i = 0; i < data.length; ++i) data[i].ranking = Math.min(n, i);
+    return data;
   }
 
   console.log(rank(name => datevalues[0][1].get(name)))
 
 
   // Creating keyframes: frames (per day) that display the ranking and spendings of political parties 
-    // Used for animating between values
-    // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
-    const keyframes = [];
-    let ka, a, kb, b;
-    for ([[ka, a], [kb, b]] of d3.pairs(datevalues)) {
-        for (let i = 0; i <= k; ++i) {
-        const t = i / k;
-        keyframes.push([
-            new Date(ka * (1 - t) + kb * t),
-            rank(partij => (a.get(partij) || 0) * (1 - t) + (b.get(partij) || 0) * t)
-          ]);
-        }
-    }
+  // Used for animating between values
+  // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
+  const keyframes = [];
+  let ka, a, kb, b;
+  for ([[ka, a], [kb, b]] of d3.pairs(datevalues)) {
+      for (let i = 0; i <= k; ++i) {
+      const t = i / k;
+      keyframes.push([
+          new Date(ka * (1 - t) + kb * t),
+          rank(partij => (a.get(partij) || 0) * (1 - t) + (b.get(partij) || 0) * t)
+        ]);
+      }
+   }
 
 
     // Keyframes per political party name + previous and next frames for al parties
@@ -185,27 +177,27 @@ function BarchartRace() {
 
 
 
-// Apend a new svg (for the slider) to the main bar chart div
-const gFrameslider = d3
-.select('.barchartdiv')
-.append('svg')
-.attr("width", width)
-.attr("height", 20)
-    .attr('class', 'frameslider')
-.append('g')
-    .attr('transform', 'translate(32,10)')
+  // Apend a new svg (for the slider) to the main bar chart div
+  const gFrameslider = d3
+  .select('.barchartdiv')
+  .append('svg')
+  .attr("width", width)
+  .attr("height", 20)
+      .attr('class', 'frameslider')
+  .append('g')
+      .attr('transform', 'translate(32,10)')
 
-gFrameslider.call(sliderFrame)
+  gFrameslider.call(sliderFrame)
 
-  // Coverting the date strings to real date objects (unique values), used for the timeline
-  const dataDates = [...(new Set(data.map(d => d.datum)))].map(function(d) {
-    return new Date(d);
-})
+    // Coverting the date strings to real date objects (unique values), used for the timeline
+    const dataDates = [...(new Set(data.map(d => d.datum)))].map(function(d) {
+      return new Date(d);
+  })
 
-// Coverting the month strings to real date objects (unique values), used for the timeline tick values
-const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
-    return new Date(d);
-})
+  // Coverting the month strings to real date objects (unique values), used for the timeline tick values
+  const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
+      return new Date(d);
+  })
 
 
   // Timeline below the keyframe slider. Used D3 simple slider plugin.
@@ -244,36 +236,36 @@ const dataMonths = [...(new Set(data.map(d => d.maand)))].map(function(d) {
     .style("opacity", 0);
 
     if(width > 400){
-// Append circles to the timeline group, using the eventData (used for displaying political events)
-gTimeline.selectAll("eventCircles")
-.data(eventData)
-.enter()
-.append('circle')
-    .attr('cx', function (d) {
-        const cx = xTime(new Date(d.datum));
-        return cx;
-    })
-    .attr('cy', "-3")
-    .attr('r', "10")
-    .attr("fill", d => color(d.partij))
-    .style("opacity", .8)
-    .on("mouseover", function(event, d) {
-    
-        // On hover, display the tooltip. Source: https://bl.ocks.org/d3noob/180287b6623496dbb5ac4b048813af52
-    d3.select(this).style("opacity", .3);	
-    div.transition()		
-        .duration(200)		
-        .style("opacity", .9);		
-    div.html(`${d.gebeurtenis}`)	
-        .style("left", (event.pageX - 20) + "px")		
-        .style("top", (event.pageY - 54) + "px");	
-    })					
-    .on("mouseout", function() {
-        d3.select(this).style("opacity", 1);			
-        div.transition()		
-            .duration(500)		
-            .style("opacity", 0);	
-    });
+      // Append circles to the timeline group, using the eventData (used for displaying political events)
+      gTimeline.selectAll("eventCircles")
+      .data(eventData)
+      .enter()
+      .append('circle')
+          .attr('cx', function (d) {
+              const cx = xTime(new Date(d.datum));
+              return cx;
+          })
+          .attr('cy', "-3")
+          .attr('r', "10")
+          .attr("fill", d => color(d.partij))
+          .style("opacity", .8)
+          .on("mouseover", function(event, d) {
+          
+              // On hover, display the tooltip. Source: https://bl.ocks.org/d3noob/180287b6623496dbb5ac4b048813af52
+          d3.select(this).style("opacity", .3);	
+          div.transition()		
+              .duration(200)		
+              .style("opacity", .9);		
+          div.html(`${d.gebeurtenis}`)	
+              .style("left", (event.pageX - 20) + "px")		
+              .style("top", (event.pageY - 54) + "px");	
+          })					
+          .on("mouseout", function() {
+              d3.select(this).style("opacity", 1);			
+              div.transition()		
+                  .duration(500)		
+                  .style("opacity", 0);	
+          });
 
     }
 
@@ -522,8 +514,8 @@ gTimeline.selectAll("eventCircles")
       // Source: https://stackoverflow.com/questions/37624322/uncaught-in-promise-undefined-error-when-using-with-location-in-facebook-gra
       await transition.end().then(() => {}).catch(() => {});
   }
-    }
-    createBarChart()
+    // }
+    // createBarChart()
 
     return (
       <div className="barchartdiv" width="100%">
@@ -531,4 +523,3 @@ gTimeline.selectAll("eventCircles")
     );
   }
   
-  export default BarchartRace;

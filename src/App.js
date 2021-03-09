@@ -5,35 +5,30 @@ import Loading from './components/Loading'
 import fetchData from './helper/data'
 
 function App() {
+  
+  const [view, setView] = useState('loading');
 
-
-  const [dataState, setDataState] = useState('loading')
-
+  const [dayData, setDayData] = useState(null);
+  const [eventData, setEventData] = useState(null);
 
   useEffect(() => {
 
-      async function getData(){
-      await fetchData(setDataState)
+    async function getData(){
+      const daySpendDataURL = "https://docs.google.com/spreadsheets/d/1zBQlY4VlalwP2sXshquH8zwrWmLfS5F0K5cF8RJKyNU/export?format=csv"
+      const eventDashboardURL = "https://docs.google.com/spreadsheets/d/1UkvW4wmthdvaaWvvJS_R5CUiCJZXz6fPDlIKE3ulmjM/export?format=csv"
+      await setDayData(await fetchData(daySpendDataURL))
+      await setEventData(await fetchData(eventDashboardURL))
+      await setView('barchart')
     }
-getData()
-      }, [])
-
-
-if(dataState === 'loading'){
+    getData()
+  }, [])
+  
   return (
     <div className="App">
-   <Loading  />
+      {view == 'loading' && <Loading  />}
+      {view == 'barchart' && <BarchartRace data={dayData} eventData={eventData} />}
     </div>
   )
-}else if(dataState === "finished"){
-
-  return (
-    <div className="App">
-   <BarchartRace />
-    </div>
-  )
-  }
-
 
 }
 
