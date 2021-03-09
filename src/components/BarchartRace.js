@@ -4,6 +4,18 @@ import React, { useEffect} from 'react'
 
 export default function BarchartRace({ data, eventData }) {
   d3.select('.barchartdiv').selectAll('svg').remove()
+  
+  let svg = null;
+  // Duration between keyframes (in milliseconds)
+  let duration = 100;
+  let keyframes = [];
+  let sliderFrame = null;
+  let x = null;
+  let y = null;
+  let updateBars = null;
+  let updateAxis = null;
+  let updateLabels = null;
+  let updateTicker = null;
 
   useEffect(() => {
     //remove the useless zero value out of the dataset
@@ -13,7 +25,7 @@ export default function BarchartRace({ data, eventData }) {
 
     // The data from the "day dashboard" maintained by FTM
     let partijen = new Set(data.map((d) => d.partij));
-    console.log(partijen)
+    // console.log(partijen)
     // Unique political party names
     let partijNames = d3.group(data, (d) => d.partij);
 
@@ -48,13 +60,12 @@ export default function BarchartRace({ data, eventData }) {
     // The higher the number, the slower the total duration of the animation
     const k = 1.5;
 
-    // Duration between keyframes (in milliseconds)
-    const duration = 100;
+    
 
     const height = margin.top + barSize * n + margin.bottom;
 
     // Appending SVG element to div
-    const svg = d3
+    svg = d3
       .select('.barchartdiv')
       .append('svg')
       .attr('width', width)
@@ -132,8 +143,8 @@ export default function BarchartRace({ data, eventData }) {
     }
 
     // Setting X & Y scales
-    const x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
-    const y = d3
+    x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
+    y = d3
       .scaleBand()
       .domain(d3.range(n + 1))
       .rangeRound([margin.top, margin.top + barSize * (n + 1 + 0.1)])
@@ -156,7 +167,6 @@ export default function BarchartRace({ data, eventData }) {
     // Creating keyframes: frames (per day) that display the ranking and spendings of political parties
     // Used for animating between values
     // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
-    const keyframes = [];
     let ka, a, kb, b;
     for ([[ka, a], [kb, b]] of d3.pairs(datevalues)) {
       for (let i = 0; i <= k; ++i) {
@@ -203,7 +213,7 @@ export default function BarchartRace({ data, eventData }) {
     // Slider for jumping to a specific date (keyframe), using D3 simple slider plugin
     // Values between 0 and last keyframe
     // Sources: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518 & https://github.com/johnwalley/d3-simple-slider
-    const sliderFrame = sliderBottom()
+    sliderFrame = sliderBottom()
       .min(0)
       .max(keyframes.length - 1)
       .width(width - 80)
@@ -558,76 +568,73 @@ export default function BarchartRace({ data, eventData }) {
           ));
     }
 
-    // start() stop() functions used to start and pause the animation.
-    // CurrentDataSetIndex registers the number of the displayed keyframe.
-    // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
-    let elapsedTime = duration;
-    //   let currentDataSetIndex = 0;
-
-    //   function stop() {
-    //       console.log("STOP");
-    //       svg.interrupt();
-    //   }
-
-    //   function start() {
-    //       render(currentDataSetIndex);
-    //       console.log("START");
-    //   }
-
     // Functions that are called to update the parts of the bar chart race.
     // Source barchart race: https://observablehq.com/@d3/bar-chart-race-explained
-    const updateBars = bars(svg);
-    const updateAxis = axis(svg);
-    const updateLabels = labels(svg);
-    const updateTicker = ticker(svg);
+    updateBars = bars(svg);
+    updateAxis = axis(svg);
+    updateLabels = labels(svg);
+    updateTicker = ticker(svg);
 
-    // Call the render function to render the bar chart race, starting with the first frame.
-    render(0);
-
-    // Function used to render the bar chart race with a given frame number (default is 0).
-    // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
-    async function render(index = 0) {
-      //   currentDataSetIndex = index;
-      
-      const transition = svg
-        .transition()
-        .duration(elapsedTime)
-        .ease(d3.easeSinInOut)
-        .on('end', () => {
-          if (index < keyframes.length) {
-            elapsedTime = duration;
-            d3.select('.controls').text('Pauzeer');
-
-            // Render next frame
-            render(index + 1);
-          } else {
-            // If frames ended, give option to replay animation.
-            d3.select('.controls').text('Afspelen');
-          }
-        })
-        .on('interrupt', () => {
-          console.log('INTERRUPTED');
-        });
-
-      // Execute the functions that are used to update the bar chart race.
-      if (index < keyframes.length) {
-        sliderFrame.value(index);
-        x.domain([0, keyframes[index][1][0].midden]);
-        updateTicker(keyframes[index], transition);
-        updateAxis(keyframes[index], transition);
-        updateBars(keyframes[index], transition);
-        updateLabels(keyframes[index], transition);
-      }
-
-      // Wait for the transition to end.
-      // Catch promise error, generated when animation is interrupted.
-      // Source: https://stackoverflow.com/questions/37624322/uncaught-in-promise-undefined-error-when-using-with-location-in-facebook-gra
-      await transition
-        .end()
-        .then(() => {})
-        .catch(() => {});
-    }
   }, [])
 
-  return <div className="barchartdiv" width="100%"></div>;
+// start() stop() functions used to start and pause the animation.
+// CurrentDataSetIndex registers the number of the displayed keyframe.
+// Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
+let elapsedTime = duration;
+
+  // Function used to render the bar chart race with a given frame number (default is 0).
+  // Adapted from: https://medium.com/@tarsusi/make-your-own-custom-bar-chart-race-with-d3-js-b7d6cfc4d0bd
+  async function render(index = 0) {
+    //   currentDataSetIndex = index;
+    
+    const transition = svg
+      .transition()
+      .duration(elapsedTime)
+      .ease(d3.easeSinInOut)
+      .on('end', () => {
+        if (index < keyframes.length) {
+          elapsedTime = duration;
+          d3.select('.controls').text('Pauzeer');
+
+          // Render next frame
+          render(index + 1);
+        } else {
+          // If frames ended, give option to replay animation.
+          d3.select('.controls').text('Afspelen');
+        }
+      })
+      .on('interrupt', () => {
+        console.log('INTERRUPTED');
+      });
+
+    // Execute the functions that are used to update the bar chart race.
+    if (index < keyframes.length) {
+      sliderFrame.value(index);
+      x.domain([0, keyframes[index][1][0].midden]);
+      updateTicker(keyframes[index], transition);
+      updateAxis(keyframes[index], transition);
+      updateBars(keyframes[index], transition);
+      updateLabels(keyframes[index], transition);
+    }
+
+    // Wait for the transition to end.
+    // Catch promise error, generated when animation is interrupted.
+    // Source: https://stackoverflow.com/questions/37624322/uncaught-in-promise-undefined-error-when-using-with-location-in-facebook-gra
+    await transition
+      .end()
+      .then(() => {})
+      .catch(() => {});
+  }
+  
+  function start() {
+    document.querySelector('.overlay').remove();
+    // Call the render function to render the bar chart race, starting with the first frame.
+    render(0);
+  }
+
+  return (<div className="barchartdiv" width="100%">
+      <div className="overlay" onClick={start}>
+        <button>Start</button>
+      </div>
+    </div>);
 }
